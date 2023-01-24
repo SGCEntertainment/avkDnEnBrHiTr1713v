@@ -6,11 +6,13 @@ public class GameManager : MonoBehaviour
     private bool IsStarted { get; set; }
 
     [SerializeField] GameObject game;
+    [SerializeField] GameObject result;
     [SerializeField] GameObject taptostart;
 
     private void Awake()
     {
         game.SetActive(false);
+        result.SetActive(false);
     }
 
     private void Update()
