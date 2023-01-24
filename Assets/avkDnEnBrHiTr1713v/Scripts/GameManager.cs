@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -17,6 +18,9 @@ public class GameManager : MonoBehaviour
 
     [Space(10)]
     [SerializeField] Transform bullets;
+
+    [Space(10)]
+    [SerializeField] Image timerImage;
 
     private void Awake()
     {
@@ -47,6 +51,7 @@ public class GameManager : MonoBehaviour
 
         game.SetActive(true);
         taptostart.SetActive(false);
+        result.SetActive(false);
 
         StartCoroutine(nameof(EnemySpawning));
     }
@@ -56,7 +61,7 @@ public class GameManager : MonoBehaviour
         bullets.GetChild(bulletId).gameObject.SetActive(false);
 
         bulletId--;
-        if(bulletId <=0)
+        if(bulletId < 0)
         {
             GameOver();
             return;
@@ -65,13 +70,16 @@ public class GameManager : MonoBehaviour
 
     private void GameOver()
     {
-        foreach(Enemy enemy in FindObjectsOfType<Enemy>())
+        StopCoroutine(nameof(EnemySpawning));
+        foreach (Enemy enemy in FindObjectsOfType<Enemy>())
         {
             Destroy(enemy.gameObject);
         }
 
         game.SetActive(false);
         result.SetActive(true);
+
+        StartCoroutine(nameof(Timer));
     }
 
     private IEnumerator EnemySpawning()
@@ -81,5 +89,20 @@ public class GameManager : MonoBehaviour
             Instantiate(EnemyPrefab, EnemyParent);
             yield return new WaitForSeconds(Random.Range(0.25f, 1.25f));
         }
+    }
+
+    private IEnumerator Timer()
+    {
+        float duration = 2.0f;
+        float et = 0.0f;
+
+        while(et < duration)
+        {
+            et += Time.deltaTime;
+            timerImage.fillAmount = et / duration;
+            yield return null;
+        }
+
+        StartGame();
     }
 }
