@@ -7,6 +7,7 @@ public class Aim : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             transform.position = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            GameManager.Instance.Shoot();
         }
     }
 }
