@@ -15,6 +15,7 @@ public class Enemy : MonoBehaviour
 
     private void OnMouseDown()
     {
+        GameManager.Instance.UpdateScore();
         Destroy(gameObject);
     }
 }

@@ -7,7 +7,9 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get => FindObjectOfType<GameManager>(); }
 
     private bool IsStarted { get; set; }
+
     private int bulletId;
+    private int score;
 
     private GameObject EnemyPrefab { get; set; }
     private Transform EnemyParent { get; set; }
@@ -21,6 +23,10 @@ public class GameManager : MonoBehaviour
 
     [Space(10)]
     [SerializeField] Image timerImage;
+
+    [Space(10)]
+    [SerializeField] Text scoreText;
+    [SerializeField] Text finalScoreText;
 
     private void Awake()
     {
@@ -43,6 +49,9 @@ public class GameManager : MonoBehaviour
     {
         IsStarted = true;
         bulletId = bullets.childCount - 1;
+
+        score = 0;
+        scoreText.text = $"{score}";
 
         foreach(Transform t in bullets)
         {
@@ -68,8 +77,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void UpdateScore()
+    {
+        score += Random.Range(125, 325);
+        scoreText.text = $"{score}";
+    }
+
     private void GameOver()
     {
+        finalScoreText.text = scoreText.text;
+
         StopCoroutine(nameof(EnemySpawning));
         foreach (Enemy enemy in FindObjectsOfType<Enemy>())
         {
